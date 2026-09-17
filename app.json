@@ -29,15 +29,15 @@
         "auth": "none",
         "jwtRequired": false,
         "response": {
-          "version": "v1",
           "success": true,
+          "version": "v1",
           "count": "number",
           "data": "array"
         },
         "dataMapping": {
-          "list": "card",
-          "detail": "productdetailpage",
-          "variants": "productdetailpage.variants"
+          "list": "data[].card",
+          "detail": "data[].productdetailpage",
+          "variants": "data[].productdetailpage.variants"
         },
         "parameters": {
           "item_group_id": {
@@ -53,10 +53,36 @@
           }
         },
         "queryRules": {
-          "allowed": ["item_group_id", "id"],
-          "unsupported": ["title", "page", "limit", "offset", "sort", "order"],
+          "supported": ["item_group_id", "id"],
+          "explicitlyUnsupported": ["title", "page", "limit", "offset", "sort", "order"],
           "duplicateParameter": "invalid",
-          "idWithoutItemGroupId": "invalid"
+          "idWithoutItemGroupId": "invalid",
+          "otherParameters": "ignored"
+        },
+        "errors": {
+          "invalidQuery": {
+            "status": 400,
+            "code": "INVALID_QUERY",
+            "response": {
+              "success": false,
+              "error": {
+                "code": "INVALID_QUERY",
+                "message": "string"
+              }
+            }
+          },
+          "methodNotAllowed": {
+            "status": 405,
+            "code": "METHOD_NOT_ALLOWED"
+          },
+          "serverConfigError": {
+            "status": 500,
+            "code": "SERVER_CONFIG_ERROR"
+          },
+          "databaseError": {
+            "status": 500,
+            "code": "DATABASE_ERROR"
+          }
         }
       }
     }
@@ -64,9 +90,18 @@
   "data": {
     "source": "api.products",
     "apiResponse": {
-      "catalog": "card",
-      "productDetail": "productdetailpage",
-      "variants": "productdetailpage.variants"
+      "catalog": "data[].card",
+      "productDetail": "data[].productdetailpage",
+      "variants": "data[].productdetailpage.variants"
+    },
+    "grouping": {
+      "key": "item_group_id",
+      "description": "The Edge Function groups trx_products rows by item_group_id and returns one card plus one productdetailpage per group."
+    },
+    "cardSelection": {
+      "rule": "lowest effective price",
+      "effectivePrice": "sale_price when present, otherwise price",
+      "imageSource": "selected variant image_link"
     }
   },
   "database": {
@@ -159,8 +194,10 @@
       "actions": ["viewDetail", "addToCart"]
     },
     "ProductImageGallery": {
-      "dataSource": "api.products.data[].productdetailpage",
-      "fields": ["image_link", "additional_image_link"]
+      "dataSource": "api.products.data[].productdetailpage.variants[].variant_color",
+      "fields": ["image_link", "additional_image_link"],
+      "imageSource": "variant_color.image_link",
+      "additionalImageSource": "variant_color.additional_image_link"
     },
     "VariantSelector": {
       "dataSource": "api.products.data[].productdetailpage.variants",
@@ -169,6 +206,14 @@
     "AddToCartButton": {
       "action": "cart.addItem",
       "afterAction": "openCart"
+    },
+    "SkeletonNotFound": {
+      "type": "emptyOrErrorState",
+      "displayWhen": [
+        "products not found",
+        "api.products.data is empty",
+        "product API request fails"
+      ]
     }
   },
   "state": {
@@ -184,9 +229,8 @@
   },
   "businessRules": {
     "productAvailability": {
-      "available": "show",
-      "out_of_stock": "disable_purchase",
-      "discontinued": "hide"
+      "source": "api.products.data[].productdetailpage.availability",
+      "behavior": "Use the backend-provided availability value without assuming an enum not defined by the Edge Function."
     },
     "pricing": {
       "displaySalePrice": true,
@@ -209,8 +253,22 @@
     "variant": {
       "selectedBy": "id",
       "imageSource": "variant_color.image_link",
+      "additionalImageSource": "variant_color.additional_image_link",
       "priceSource": "variant_size.price",
-      "salePriceSource": "variant_size.sale_price"
+      "salePriceSource": "variant_size.sale_price",
+      "backendLinkSource": "link",
+      "backendLinkFormat": "/products?item_group_id=<item_group_id>&variantsId=<id>",
+      "apiFilterParameter": "id"
+    },
+    "search": {
+      "mode": "client-side",
+      "source": "api.products.data[].card",
+      "apiSearchParameter": false
+    },
+    "filter": {
+      "mode": "client-side",
+      "source": "api.products.data[].card",
+      "apiFilterParameters": ["item_group_id", "id"]
     }
   },
   "theme": {
@@ -259,13 +317,23 @@
     "If the API returns an empty data array, display Skeleton Not Found",
     "If the product API request fails, display Skeleton Not Found",
     "GET /get-trx-products is the only product data source",
-    "Catalog must use the card response structure",
-    "Product detail must use the productdetailpage response structure",
-    "Variants must use productdetailpage.variants",
+    "Catalog must use data[].card",
+    "Product detail must use data[].productdetailpage",
+    "Variants must use data[].productdetailpage.variants",
+    "Product images must use variants[].variant_color.image_link and variants[].variant_color.additional_image_link",
+    "Product card selection follows the Edge Function lowest effective price rule",
+    "Effective price is sale_price when present, otherwise price",
     "Product detail requires item_group_id",
     "id may only be sent together with item_group_id",
-    "Do not send unsupported API query parameters",
+    "Only item_group_id and id are supported API filters",
+    "Do not send explicitly unsupported API query parameters",
     "Do not send duplicate query parameters",
+    "Unknown query parameters are not used as product filters",
+    "Search must be client-side and must not send title as an API search parameter",
+    "Filtering must be client-side unless using the supported item_group_id or id API parameters",
+    "Use backend-provided availability values without inventing availability enums",
+    "Use the backend-provided variant link when navigating from a variant",
+    "The backend variant link uses variantsId, while the API filter parameter is id",
     "Do not use service_role key in frontend",
     "Do not add product fields that are not provided by the API",
     "Do not add features not defined in this blueprint"
