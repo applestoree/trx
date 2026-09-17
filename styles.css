@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap');
+
+:root { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2421; background: #fbfbfa; font-synthesis: none; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+#root { width: 100%; height: 100%; max-width: 500px; margin: 0 auto; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+body { margin: 0; min-width: 320px; background: #fbfbfa; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+.splash-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; color: #202824; text-align: center; }
+.app-icon, .mini-icon { display: grid; place-items: center; color: #8b6a3f; background: #f1dfc3; transform: rotate(45deg); font-size: 26px; }
+.lucide-icon { display: block; flex: 0 0 auto; }
+.app-icon { width: 78px; height: 78px; border-radius: 24px; margin-bottom: 30px; }
+.app-icon::first-letter, .mini-icon::first-letter { transform: rotate(-45deg); }
+.splash-screen h1 { margin: 0; font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 500; letter-spacing: -.5px; }
+.splash-screen p { color: #89918c; font-size: 14px; margin: 12px 0 44px; }
+.loading-dots { width: 35px; height: 4px; border-radius: 5px; background: #c8a46d; animation: pulse 1s infinite ease-in-out; }
+@keyframes pulse { 50% { opacity: .35; transform: scaleX(.7); } }
+.auth-page { min-height: 100vh; padding: 40px 24px 28px; display: flex; flex-direction: column; align-items: center; background: #f7f8f6; }
+.auth-brand { align-self: flex-start; display: flex; align-items: center; gap: 13px; font-weight: 700; font-size: 17px; color: #173b36; margin-bottom: 55px; }
+.mini-icon { width: 31px; height: 31px; border-radius: 10px; font-size: 13px; }
+.auth-card { width: min(100%, 410px); }
+.eyebrow, .hero-label, .greeting { color: #a66e49; font-weight: 700; font-size: 10px; letter-spacing: 1.3px; }
+.auth-card h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 8vw, 43px); line-height: 1.1; font-weight: 500; margin: 12px 0 14px; color: #173b36; }
+.muted { color: #74817c; font-size: 14px; line-height: 1.55; margin: 0 0 31px; }
+form label { display: block; color: #52605a; font-size: 12px; font-weight: 600; margin: 17px 0; }
+input { width: 100%; border: 1px solid #d9ded9; background: white; border-radius: 10px; padding: 14px 15px; margin-top: 8px; outline: none; color: #173b36; }
+input:focus { border-color: #4f8174; box-shadow: 0 0 0 3px #dcece6; }
+input::placeholder { color: #adb6b1; }
+.text-button { border: 0; background: none; color: #317262; font-weight: 600; padding: 0; }
+.forgot { display: block; margin: -2px 0 22px; font-size: 12px; margin-left: auto; }
+.primary-button { border: 0; width: 100%; background: #173b36; color: white; border-radius: 10px; padding: 15px; font-weight: 600; margin-top: 4px; }
+.primary-button span { float: right; font-size: 19px; line-height: 13px; }
+.divider { display: flex; align-items: center; gap: 12px; color: #9aa49f; font-size: 11px; margin: 28px 0 17px; }
+.divider::before, .divider::after { content: ''; height: 1px; background: #dde1dd; flex: 1; }
+.social-button { width: 100%; border: 1px solid #d9ded9; background: white; color: #25332e; border-radius: 10px; padding: 13px; font-weight: 600; }
+.social-button strong { font-size: 18px; margin-right: 7px; }
+.switch-mode { text-align: center; color: #74817c; font-size: 12px; margin-top: 28px; }
+.switch-mode .text-button { font-size: 12px; }
+.legal { color: #9aa49f; text-align: center; font-size: 10px; margin-top: auto; }
+.app-shell { width: 100%; height: 100%; min-height: 100%; max-width: 520px; margin: auto; background: #ffffff; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+.app-header { flex: 0 0 56px; height: 56px; padding: 0 22px; display: flex; align-items: center; justify-content: space-between; }
+.shell-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+.app-logo { display: block; width: auto; height: 36px; object-fit: contain; }
+.cart-button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #eee9e1; border-radius: 50%; background: #ffffff; color: #8b6a3f; font-size: 19px; box-shadow: 0 5px 18px rgba(45, 38, 28, .07); }
+.app-header h1 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 27px; color: #173b36; margin: 9px 0 0; }
+.app-header h1 span { color: #d89968; font-family: sans-serif; font-size: 20px; }
+.shell-content .page-content { padding-top: 24px; }
+.catalog-intro { color: #74817c; font-size: 14px; line-height: 1.5; margin: 0 0 22px; }
+.catalog-list { display: grid; gap: 11px; }
+.catalog-card { width: 100%; display: flex; align-items: center; gap: 13px; border: 0; border-radius: 13px; background: white; padding: 16px; color: #34423c; text-align: left; box-shadow: 0 3px 15px #173b3608; }
+.catalog-card:hover { background: #fbfcfb; }
+.catalog-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: #f2e8dc; color: #a66e49; font-size: 18px; }
+.catalog-copy { display: grid; gap: 5px; min-width: 0; }
+.catalog-copy strong { font-size: 13px; }
+.catalog-copy small { color: #98a49e; font-size: 10px; }
+.catalog-duration { margin-left: auto; color: #98a49e; font-size: 10px; white-space: nowrap; }
+
+.page-content { padding: 30px 22px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.topbar h1 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 27px; color: #173b36; margin: 9px 0 0; }
+.topbar h1 span { color: #d89968; font-family: sans-serif; font-size: 20px; }
+.avatar, .large-avatar { display: grid; place-items: center; border-radius: 50%; background: #e4b58e; color: #704d38; font-size: 11px; font-weight: 700; }
+.avatar { width: 39px; height: 39px; }
+.hero-card { background: #faf7f1; color: #202824; border: 1px solid #eee7dc; border-radius: 17px; padding: 24px 22px; min-height: 164px; display: flex; justify-content: space-between; overflow: hidden; position: relative; box-shadow: 0 8px 24px rgba(45, 38, 28, .05); }
+.hero-card h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 500; line-height: 1.16; margin: 12px 0 8px; }
+.hero-card h2 em { color: #b58b55; font-weight: 500; }
+.hero-card p { color: #89918c; font-size: 12px; }
+.sun { color: #c8a46d; line-height: .8; opacity: .9; margin: 16px -13px 0 0; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; margin: 28px 0 13px; }
+.section-heading h3 { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 500; margin: 0; color: #173b36; }
+.section-heading .text-button { font-size: 11px; }
+.task-card { display: flex; align-items: center; gap: 13px; background: #ffffff; border: 1px solid #f0efec; border-radius: 12px; padding: 15px; margin: 9px 0; box-shadow: 0 6px 18px rgba(45, 38, 28, .05); }
+.check { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #b58b55; color: white; font-size: 13px; }
+.check.empty { border: 1.5px solid #c7d0ca; background: transparent; }
+.task-card strong, .task-card span { display: block; }
+.task-card strong { font-size: 13px; color: #34423c; }
+.task-card span { font-size: 10px; color: #98a49e; margin-top: 4px; }
+.task-more { margin-left: auto; color: #b4beb8; letter-spacing: 2px; font-size: 12px; }
+.quote-heading { margin-top: 31px; }
+.quote-card { background: #faf7f1; border: 1px solid #eee7dc; border-radius: 13px; padding: 17px 20px; position: relative; box-shadow: 0 6px 18px rgba(45, 38, 28, .04); }
+.quote-mark { color: #d89968; font-family: serif; font-size: 39px; position: absolute; top: 2px; left: 13px; }
+.quote-card p { color: #53635b; font-family: 'Playfair Display', serif; font-size: 15px; margin: 3px 0 9px 22px; }
+.quote-card small { color: #9b8878; font-size: 10px; margin-left: 22px; }
+.tab-bar { position: static; flex: 0 0 64px; width: 100%; height: 64px; display: flex; justify-content: center; gap: 80px; background: rgba(255, 255, 255, .96); border-top: 1px solid #eeeae4; padding-top: 8px; backdrop-filter: blur(12px); }
+.tab-bar button { color: #a0aaa4; background: none; border: 0; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; font-weight: 600; }
+.tab-bar button span { font-size: 22px; line-height: 22px; }
+.tab-bar button.active { color: #a67c45; }
+.profile-header { text-align: center; margin: 14px 0 38px; }
+.large-avatar { width: 76px; height: 76px; margin: auto; font-size: 18px; }
+.profile-header h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 500; color: #173b36; margin: 14px 0 5px; }
+.profile-header p { color: #8b9791; font-size: 12px; margin: 0; }
+.settings-list { background: white; border-radius: 14px; overflow: hidden; }
+.settings-list button { display: flex; align-items: center; width: 100%; border: 0; border-bottom: 1px solid #eef1ee; background: white; padding: 17px; color: #45534d; text-align: left; font-size: 13px; }
+.settings-list button span { display: grid; place-items: center; color: #317262; width: 28px; }.settings-list b { display: grid; place-items: center; margin-left: auto; color: #b4beb8; font-size: 20px; font-weight: 400; }.signout { margin-top: 28px; width: 100%; border: 1px solid #e1b8a0; background: transparent; color: #a66e49; border-radius: 10px; padding: 13px; font-weight: 600; }
+@media (min-width: 600px) { .auth-page { padding-top: 55px; } }
+
+/* Apple Store-inspired finish */
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+  color: #000;
+  background: #F5F5F5;
+}
+body { background: #F5F5F5; }
+#root { width: 100%; max-width: 500px; }
+.app-shell { width: 100%; max-width: 100%; background: #FFFFFF; }
+.app-header {
+  background: rgba(255, 255, 255, .94);
+  border-bottom: 1px solid #F5F5F5;
+  padding: 0 24px;
+  backdrop-filter: saturate(180%) blur(18px);
+}
+.app-logo { height: 34px; }
+.cart-button { width: 36px; height: 36px; border: 0; background: #F5F5F5; color: #000; box-shadow: none; }
+.shell-content .page-content { padding-top: 28px; }
+.page-content { padding-left: 24px; padding-right: 24px; }
+.hero-card { background: #F5F5F5; border: 0; border-radius: 24px; box-shadow: none; padding: 28px 24px; }
+.hero-card h2,
+.section-heading h3,
+.profile-header h1,
+.splash-screen h1,
+.auth-card h1 { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; }
+.hero-card h2 { font-size: 30px; font-weight: 600; letter-spacing: -.7px; }
+.hero-card h2 em { color: #000; font-style: normal; }
+.hero-label { color: #000; letter-spacing: 1px; }
+.sun { color: #000; }
+.section-heading { margin-top: 34px; }
+.section-heading h3 { font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
+.text-button { color: #000; }
+.task-card,
+.quote-card,
+.catalog-card,
+.settings-list { border: 1px solid #F5F5F5; border-radius: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .03); }
+.task-card { margin: 10px 0; padding: 16px; }
+.task-card strong, .catalog-copy strong { color: #000; font-weight: 600; }
+.task-card span, .catalog-copy small, .catalog-duration { color: #000; opacity: .55; }
+.check { background: #000; }
+.check.empty { border-color: #000; }
+.quote-card { background: #FFFFFF; border-color: #F5F5F5; box-shadow: none; }
+.quote-card p { color: #000; font-family: inherit; font-size: 15px; }
+.quote-mark { color: #000; }
+.catalog-card { padding: 16px; box-shadow: none; }
+.catalog-icon { background: #F5F5F5; color: #000; }
+.catalog-intro, .profile-header p { color: #000; opacity: .55; }
+.tab-bar { gap: 0; justify-content: space-around; background: rgba(255, 255, 255, .94); border-top-color: #F5F5F5; backdrop-filter: saturate(180%) blur(18px); }
+.tab-bar button { color: #000; opacity: .45; font-weight: 500; }
+.tab-bar button.active { color: #000; opacity: 1; }
+.profile-header h1 { font-weight: 600; }
+.large-avatar { background: #F5F5F5; color: #000; }
+.settings-list button { color: #000; border-bottom-color: #F5F5F5; }
+.settings-list button span { color: #000; }
+.settings-list b { color: #000; opacity: .45; }
+
+/* Monochrome premium palette */
+.splash-screen { background: #FFFFFF; color: #000; }
+.app-icon { color: #000; background: #F5F5F5; }
+.splash-screen p,
+.hero-card p,
+.quote-card small { color: #000; opacity: .55; }
+.loading-dots { background: #000; }
+
