@@ -1,0 +1,267 @@
+{
+  "app": {
+    "name": "Apple Store Malaysia",
+    "slug": "apple-store-malaysia",
+    "version": "2.0.0",
+    "description": "Mobile-first product catalog application",
+    "platform": "web",
+    "framework": "react-vite"
+  },
+  "environment": {
+    "mode": "production",
+    "mobileOnly": true,
+    "maxWidth": "500px"
+  },
+  "backend": {
+    "provider": "supabase",
+    "url": "https://jhpbtooefyzdndstlzva.supabase.co",
+    "authentication": {
+      "enabled": false,
+      "type": "none"
+    }
+  },
+  "api": {
+    "baseUrl": "https://jhpbtooefyzdndstlzva.supabase.co/functions/v1",
+    "endpoints": {
+      "products": {
+        "method": "GET",
+        "path": "/get-trx-products",
+        "auth": "none",
+        "jwtRequired": false,
+        "response": {
+          "version": "v1",
+          "success": true,
+          "count": "number",
+          "data": "array"
+        },
+        "dataMapping": {
+          "list": "card",
+          "detail": "productdetailpage",
+          "variants": "productdetailpage.variants"
+        },
+        "parameters": {
+          "item_group_id": {
+            "type": "string",
+            "required": false,
+            "description": "Filter product group"
+          },
+          "id": {
+            "type": "string",
+            "required": false,
+            "requires": "item_group_id",
+            "description": "Filter specific product variant"
+          }
+        },
+        "queryRules": {
+          "allowed": ["item_group_id", "id"],
+          "unsupported": ["title", "page", "limit", "offset", "sort", "order"],
+          "duplicateParameter": "invalid",
+          "idWithoutItemGroupId": "invalid"
+        }
+      }
+    }
+  },
+  "data": {
+    "source": "api.products",
+    "apiResponse": {
+      "catalog": "card",
+      "productDetail": "productdetailpage",
+      "variants": "productdetailpage.variants"
+    }
+  },
+  "database": {
+    "source": "trx_products",
+    "fields": {
+      "product": [
+        "item_group_id",
+        "title",
+        "description",
+        "availability",
+        "condition",
+        "brand",
+        "google_product_category",
+        "product_type",
+        "custom_label_0",
+        "custom_label_1",
+        "custom_label_2"
+      ],
+      "variant": [
+        "id",
+        "link",
+        "image_link",
+        "additional_image_link",
+        "variant_color",
+        "variant_size",
+        "price",
+        "sale_price"
+      ]
+    }
+  },
+  "routes": [
+    {"path": "/", "name": "Home", "component": "HomePage"},
+    {"path": "/products", "name": "Products", "component": "ProductListPage"},
+    {"path": "/products?item_group_id=:item_group_id", "name": "Product Detail", "component": "ProductDetailPage"},
+    {"path": "/cart", "name": "Cart", "component": "CartPage"},
+    {"path": "/checkout", "name": "Checkout", "component": "CheckoutPage"},
+    {"path": "/profile", "name": "Profile", "component": "ProfilePage"}
+  ],
+  "navigation": {
+    "header": {
+      "enabled": true,
+      "logo": true,
+      "cart": true
+    },
+    "bottomNavigation": {
+      "enabled": true,
+      "items": [
+        {"label": "Home", "icon": "home", "path": "/"},
+        {"label": "Products", "icon": "grid", "path": "/products"},
+        {"label": "Cart", "icon": "shopping-bag", "path": "/cart"},
+        {"label": "Profile", "icon": "user", "path": "/profile"}
+      ]
+    }
+  },
+  "pages": {
+    "HomePage": {
+      "layout": "default",
+      "components": ["Header", "HeroBanner", "CategoryList", "FeaturedProducts", "ProductGrid"]
+    },
+    "ProductListPage": {
+      "layout": "default",
+      "components": ["Header", "SearchBar", "CategoryFilter", "ProductGrid"]
+    },
+    "ProductDetailPage": {
+      "layout": "default",
+      "components": ["Header", "ProductImageGallery", "ProductInfo", "PriceDisplay", "AvailabilityBadge", "VariantSelector", "AddToCartButton"]
+    },
+    "CartPage": {
+      "layout": "default",
+      "components": ["Header", "CartItemList", "CartSummary", "CheckoutButton"]
+    },
+    "CheckoutPage": {
+      "layout": "default",
+      "components": ["Header", "CustomerForm", "OrderSummary", "PaymentMethod", "PlaceOrderButton"]
+    },
+    "ProfilePage": {
+      "layout": "default",
+      "components": ["Header", "ProfileInfo", "OrderHistory"]
+    }
+  },
+  "components": {
+    "ProductGrid": {
+      "type": "grid",
+      "columns": 2,
+      "dataSource": "api.products.data[].card"
+    },
+    "ProductCard": {
+      "dataSource": "api.products.data[].card",
+      "fields": ["item_group_id", "title", "image_link", "price", "sale_price", "product_type", "custom_label_0", "custom_label_1", "custom_label_2"],
+      "actions": ["viewDetail", "addToCart"]
+    },
+    "ProductImageGallery": {
+      "dataSource": "api.products.data[].productdetailpage",
+      "fields": ["image_link", "additional_image_link"]
+    },
+    "VariantSelector": {
+      "dataSource": "api.products.data[].productdetailpage.variants",
+      "fields": ["id", "link", "variant_color", "variant_size"]
+    },
+    "AddToCartButton": {
+      "action": "cart.addItem",
+      "afterAction": "openCart"
+    }
+  },
+  "state": {
+    "cart": {
+      "persist": true,
+      "storage": "localStorage",
+      "fields": ["productId", "item_group_id", "title", "image", "price", "sale_price", "quantity", "variant"]
+    },
+    "user": {
+      "persist": true,
+      "storage": "localStorage"
+    }
+  },
+  "businessRules": {
+    "productAvailability": {
+      "available": "show",
+      "out_of_stock": "disable_purchase",
+      "discontinued": "hide"
+    },
+    "pricing": {
+      "displaySalePrice": true,
+      "fallbackPrice": "price"
+    },
+    "cart": {
+      "minimumQuantity": 1,
+      "maximumQuantity": 10
+    },
+    "productDetail": {
+      "query": {
+        "required": ["item_group_id"],
+        "optional": ["id"]
+      },
+      "apiExamples": {
+        "product": "/get-trx-products?item_group_id=<item_group_id>",
+        "variant": "/get-trx-products?item_group_id=<item_group_id>&id=<id>"
+      }
+    },
+    "variant": {
+      "selectedBy": "id",
+      "imageSource": "variant_color.image_link",
+      "priceSource": "variant_size.price",
+      "salePriceSource": "variant_size.sale_price"
+    }
+  },
+  "theme": {
+    "style": "apple-inspired",
+    "mode": "light",
+    "colors": {
+      "primary": "#007AFF",
+      "background": "#F5F5F7",
+      "surface": "#FFFFFF",
+      "text": "#1D1D1F",
+      "muted": "#86868B",
+      "border": "#E5E5E7"
+    },
+    "layout": {
+      "maxWidth": "500px",
+      "borderRadius": "16px",
+      "spacing": "compact"
+    }
+  },
+  "features": {
+    "search": true,
+    "filter": true,
+    "cart": true,
+    "checkout": true,
+    "authentication": false,
+    "darkMode": false,
+    "pwa": true,
+    "variants": true,
+    "salePrice": true
+  },
+  "security": {
+    "frontendSecrets": false,
+    "jwtRequired": false,
+    "serviceRoleKeyInFrontend": false,
+    "cors": true
+  },
+  "rules": [
+    "Mobile-first responsive design",
+    "Maximum application width is 500px",
+    "API is the source of truth for product data",
+    "Do not use mock product data",
+    "GET /get-trx-products is the only product data source",
+    "Catalog must use the card response structure",
+    "Product detail must use the productdetailpage response structure",
+    "Variants must use productdetailpage.variants",
+    "Product detail requires item_group_id",
+    "id may only be sent together with item_group_id",
+    "Do not send unsupported API query parameters",
+    "Do not send duplicate query parameters",
+    "Do not use service_role key in frontend",
+    "Do not add product fields that are not provided by the API",
+    "Do not add features not defined in this blueprint"
+  ]
+}
